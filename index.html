@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>台中群英 · 血液活力小調查</title>
+<title>台中群英 · 血液活力深度探索</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -32,947 +32,237 @@
   .serif { font-family: 'Noto Serif TC', serif; }
   .display { font-family: 'DM Serif Display', serif; }
 
-  /* ─── SCREENS ─── */
   .screen {
-    position: fixed;
-    inset: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1);
-    transform: translateY(24px);
+    position: fixed; inset: 0;
+    overflow-y: auto; overflow-x: hidden;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(20px);
   }
-  .screen.active {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
-  }
-  .screen.exit {
-    opacity: 0;
-    transform: translateY(-24px);
-    pointer-events: none;
-  }
+  .screen.active { opacity: 1; pointer-events: all; transform: translateY(0); }
 
-  /* ─── DECORATIVE LINES ─── */
-  .h-line {
-    height: 0.5px;
-    background: var(--line-color);
-  }
-
-  /* ─── COVER SCREEN ─── */
-  #screen-cover {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 48px 32px;
-    background: var(--white);
-  }
-
-  .cover-corner {
-    position: fixed;
-    width: 80px; height: 80px;
-    pointer-events: none;
-  }
-  .cover-corner.tl { top: 24px; left: 24px; border-top: 0.5px solid var(--pink); border-left: 0.5px solid var(--pink); }
-  .cover-corner.tr { top: 24px; right: 24px; border-top: 0.5px solid var(--pink); border-right: 0.5px solid var(--pink); }
-  .cover-corner.bl { bottom: 24px; left: 24px; border-bottom: 0.5px solid var(--pink); border-left: 0.5px solid var(--pink); }
-  .cover-corner.br { bottom: 24px; right: 24px; border-bottom: 0.5px solid var(--pink); border-right: 0.5px solid var(--pink); }
-
-  .issue-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    color: var(--pink);
-    font-weight: 300;
-    margin-bottom: 32px;
-    text-transform: uppercase;
-  }
-
-  .cover-title {
-    font-size: clamp(28px, 7vw, 40px);
-    line-height: 1.3;
-    text-align: center;
-    color: var(--gray-dark);
-    letter-spacing: 0.04em;
-    margin-bottom: 8px;
-  }
-
-  .cover-sub {
-    font-size: 13px;
-    color: var(--pink);
-    letter-spacing: 0.2em;
-    margin-bottom: 48px;
-    text-align: center;
-  }
-
-  .cover-desc {
-    font-size: 13px;
-    line-height: 2;
-    color: var(--gray-mid);
-    text-align: center;
-    max-width: 280px;
-    margin-bottom: 56px;
-  }
-
+  .issue-label { font-size: 10px; letter-spacing: 0.25em; color: var(--pink); text-transform: uppercase; margin-bottom: 24px; }
+  .cover-title { font-size: clamp(26px, 7vw, 36px); line-height: 1.4; text-align: center; color: var(--gray-dark); margin-bottom: 12px; }
+  
   .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 36px;
-    border: 0.5px solid var(--pink);
-    background: transparent;
-    color: var(--gray-dark);
-    font-size: 13px;
-    letter-spacing: 0.15em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Noto Sans TC', sans-serif;
-    font-weight: 300;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--pink-light);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-  }
-  .btn-primary:hover::before, .btn-primary:active::before {
-    transform: scaleX(1);
-  }
-  .btn-primary span { position: relative; z-index: 1; }
-
-  .cover-note {
-    margin-top: 32px;
-    font-size: 11px;
-    color: #D1D5DB;
-    letter-spacing: 0.1em;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 40px; border: 0.5px solid var(--pink);
+    background: transparent; color: var(--gray-dark);
+    font-size: 13px; letter-spacing: 0.15em; cursor: pointer;
   }
 
-  /* ─── QUESTION SCREEN ─── */
-  #screen-quiz {
-    background: var(--white);
-    padding: 0;
-  }
+  /* Quiz Style */
+  .quiz-header { position: sticky; top: 0; background: white; z-index: 20; padding: 20px 24px; border-bottom: 0.5px solid var(--line-color); }
+  .quiz-progress-bar { width: 100%; height: 1px; background: #F3F4F6; margin-top: 10px; }
+  .quiz-progress-fill { height: 100%; background: var(--pink); transition: width 0.4s ease; }
+  
+  .quiz-body { padding: 20px 24px 120px; }
+  .dimension-section { margin-bottom: 40px; }
+  .dimension-title { font-size: 18px; font-weight: 300; margin-bottom: 16px; color: var(--gray-dark); border-left: 2px solid var(--pink); padding-left: 12px; }
+  
+  .question-item { padding: 18px 0; border-bottom: 0.5px solid #F3F4F6; cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .q-text { font-size: 14px; line-height: 1.6; color: var(--gray-mid); transition: color 0.3s; }
+  .question-item.checked .q-text { color: var(--gray-dark); font-weight: 400; }
+  
+  .q-checkbox { width: 18px; height: 18px; border: 0.5px solid #D1D5DB; border-radius: 50%; flex-shrink: 0; margin-top: 2px; position: relative; }
+  .question-item.checked .q-checkbox { border-color: var(--pink); background: var(--pink-light); }
+  .question-item.checked .q-checkbox::after { content: ''; position: absolute; inset: 4px; background: var(--pink); border-radius: 50%; }
 
-  .quiz-header {
-    position: sticky;
-    top: 0;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(8px);
-    z-index: 10;
-    padding: 20px 28px 16px;
-    border-bottom: 0.5px solid var(--line-color);
-  }
+  .quiz-footer { position: relative; padding: 24px; text-align: center; background: white; }
+  .btn-submit { width: 100%; padding: 16px; background: var(--gray-dark); color: white; letter-spacing: 0.1em; font-size: 14px; }
 
-  .quiz-progress-bar {
-    width: 100%;
-    height: 1px;
-    background: #F3F4F6;
-    margin-top: 12px;
-  }
-  .quiz-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--pink) 0%, #F87171 100%);
-    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-  }
+  /* Result Style */
+  .result-card { background: var(--gray-light); padding: 24px; border-radius: 4px; margin-bottom: 24px; }
+  .tag-level { font-size: 10px; padding: 2px 8px; border-radius: 100px; display: inline-block; margin-bottom: 8px; }
+  .level-low { background: #E5E7EB; color: #6B7280; }
+  .level-mid { background: #FEE2E2; color: #EF4444; }
+  .level-high { background: #FECACA; color: #B91C1C; }
 
-  .quiz-body {
-    padding: 0 28px 200px;
-  }
-
-  .dimension-header {
-    padding: 40px 0 20px;
-    position: relative;
-  }
-  .dimension-tag {
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    color: var(--pink);
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 6px;
-  }
-  .dimension-title {
-    font-size: 20px;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-  }
-
-  .question-item {
-    padding: 20px 0;
-    border-bottom: 0.5px solid var(--line-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .question-item:last-child { border-bottom: none; }
-
-  .q-number {
-    font-size: 10px;
-    color: #D1D5DB;
-    letter-spacing: 0.2em;
-    margin-bottom: 8px;
-    font-family: 'DM Serif Display', serif;
-    font-style: italic;
-  }
-
-  .q-text {
-    font-size: 15px;
-    line-height: 1.8;
-    font-weight: 300;
-    color: var(--gray-dark);
-    transition: color 0.2s;
-  }
-
-  .q-checkbox {
-    width: 20px; height: 20px;
-    border: 0.5px solid #D1D5DB;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-    margin-top: 4px;
-  }
-  .q-checkbox .check-inner {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--pink);
-    transform: scale(0);
-    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-  }
-
-  .question-item.checked .q-checkbox {
-    border-color: var(--pink);
-    background: var(--pink-light);
-  }
-  .question-item.checked .q-checkbox .check-inner {
-    transform: scale(1);
-  }
-  .question-item.checked .q-text {
-    color: #9CA3AF;
-  }
-  .question-item.checked .q-number {
-    color: var(--pink);
-  }
-
-  /* quiz footer */
-  .quiz-footer {
-    position: relative;
-    bottom: 0; left: 0; right: 0;
-    padding: 16px 28px 28px;
-    background: rgba(255,255,255,0.97);
-    backdrop-filter: blur(12px);
-    border-top: 0.5px solid var(--line-color);
-  }
-
-  .btn-submit {
-    width: 100%;
-    padding: 15px;
-    background: var(--gray-dark);
-    color: white;
-    font-size: 13px;
-    letter-spacing: 0.2em;
-    border: none;
-    cursor: pointer;
-    font-family: 'Noto Sans TC', sans-serif;
-    font-weight: 300;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-submit::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--pink);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease;
-  }
-  .btn-submit:hover::before, .btn-submit:active::before {
-    transform: scaleX(1);
-  }
-  .btn-submit span { position: relative; z-index: 1; }
-  .btn-submit:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-  .btn-submit:disabled::before { transform: scaleX(0) !important; }
-
-  /* ─── RESULT SCREEN ─── */
-  #screen-result {
-    background: var(--white);
-    padding: 0 0 80px;
-  }
-
-  .result-hero {
-    padding: 60px 32px 48px;
-    text-align: center;
-    position: relative;
-    border-bottom: 0.5px solid var(--line-color);
-  }
-
-  .result-label {
-    font-size: 10px;
-    letter-spacing: 0.35em;
-    color: var(--pink);
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 20px;
-  }
-
-  .result-type {
-    font-size: clamp(22px, 6vw, 32px);
-    font-weight: 300;
-    letter-spacing: 0.06em;
-    color: var(--gray-dark);
-    margin-bottom: 6px;
-    line-height: 1.3;
-  }
-
-  .result-type-en {
-    font-family: 'DM Serif Display', serif;
-    font-style: italic;
-    font-size: clamp(13px, 3.5vw, 17px);
-    color: var(--pink);
-    letter-spacing: 0.08em;
-    margin-bottom: 32px;
-    display: block;
-  }
-
-  .score-dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 0;
-  }
-  .score-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    border: 0.5px solid var(--pink);
-  }
-  .score-dot.filled { background: var(--pink); }
-
-  .result-analysis {
-    padding: 40px 32px;
-    border-bottom: 0.5px solid var(--line-color);
-  }
-
-  .analysis-heading {
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    color: var(--pink);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
-
-  .analysis-body {
-    font-size: 14px;
-    line-height: 2.2;
-    font-weight: 300;
-    color: var(--gray-dark);
-  }
-
-  .analysis-highlight {
-    display: inline-block;
-    background: var(--pink-light);
-    padding: 1px 6px;
-    border-radius: 2px;
-    color: #DC2626;
-    font-weight: 400;
-  }
-
-  /* score bar */
-  .score-section {
-    padding: 36px 32px;
-    border-bottom: 0.5px solid var(--line-color);
-  }
-  .score-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 16px;
-  }
-  .score-label { font-size: 11px; letter-spacing: 0.1em; color: var(--gray-mid); width: 60px; flex-shrink: 0; }
-  .score-track { flex: 1; height: 1px; background: #F3F4F6; position: relative; }
-  .score-fill {
-    position: absolute;
-    top: 0; left: 0;
-    height: 1px;
-    background: var(--pink);
-    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
-  }
-  .score-num { font-size: 11px; color: var(--pink); font-family: 'DM Serif Display', serif; width: 20px; text-align: right; }
-
-  /* ─── VOUCHER ─── */
-  .voucher-section {
-    padding: 36px 24px 0;
-  }
-
-  .voucher-label {
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    color: var(--gray-mid);
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  .voucher-card {
-    border: 0.5px solid var(--pink-mid);
-    padding: 32px 24px;
-    position: relative;
-    background: linear-gradient(135deg, #fffafa 0%, #fff5f5 50%, #fffafa 100%);
-    overflow: hidden;
-  }
-  .voucher-card::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    border: 0.5px solid var(--pink-mid);
-    pointer-events: none;
-  }
-  .voucher-card::after {
-    content: '';
-    position: absolute;
-    bottom: -30px; left: -30px;
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    border: 0.5px solid var(--pink-mid);
-    pointer-events: none;
-  }
-
-  .voucher-brand {
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    color: var(--pink);
-    text-align: center;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-
-  .voucher-title {
-    font-size: clamp(16px, 4.5vw, 22px);
-    font-weight: 300;
-    text-align: center;
-    letter-spacing: 0.06em;
-    margin-bottom: 4px;
-    color: var(--gray-dark);
-    line-height: 1.4;
-  }
-
-  .voucher-title-en {
-    font-family: 'DM Serif Display', serif;
-    font-style: italic;
-    font-size: 13px;
-    color: var(--pink);
-    text-align: center;
-    display: block;
-    margin-bottom: 24px;
-    letter-spacing: 0.1em;
-  }
-
-  .h-line-pink { height: 0.5px; background: var(--pink-mid); margin: 20px 0; }
-
-  .voucher-detail {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .voucher-item { text-align: center; flex: 1; }
-  .voucher-item-label { font-size: 9px; letter-spacing: 0.2em; color: #9CA3AF; margin-bottom: 4px; text-transform: uppercase; }
-  .voucher-item-val { font-size: 13px; color: var(--gray-dark); font-weight: 300; }
-
-  .voucher-note {
-    font-size: 10px;
-    color: #D1D5DB;
-    text-align: center;
-    margin-top: 20px;
-    letter-spacing: 0.08em;
-  }
-
-  .btn-cta {
-    display: block;
-    width: 100%;
-    margin-top: 28px;
-    padding: 17px;
-    background: linear-gradient(135deg, #F87171 0%, #FCA5A5 50%, #F87171 100%);
-    background-size: 200% 100%;
-    color: white;
-    font-size: 13px;
-    letter-spacing: 0.15em;
-    text-align: center;
-    text-decoration: none;
-    font-family: 'Noto Sans TC', sans-serif;
-    font-weight: 300;
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-cta:hover, .btn-cta:active {
-    background-position: 100% 0;
-    letter-spacing: 0.2em;
-  }
-
-  .restart-btn {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    font-size: 11px;
-    color: #D1D5DB;
-    cursor: pointer;
-    letter-spacing: 0.15em;
-    padding: 8px;
-    transition: color 0.2s;
-  }
-  .restart-btn:hover { color: var(--gray-mid); }
-
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .fade-up { animation: fadeUp 0.6s ease forwards; }
-  .delay-1 { animation-delay: 0.1s; opacity: 0; }
-  .delay-2 { animation-delay: 0.2s; opacity: 0; }
-  .delay-3 { animation-delay: 0.3s; opacity: 0; }
-  .delay-4 { animation-delay: 0.4s; opacity: 0; }
-  .delay-5 { animation-delay: 0.5s; opacity: 0; }
-  .delay-6 { animation-delay: 0.6s; opacity: 0; }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
-  }
-  .float { animation: float 4s ease-in-out infinite; }
-
-  @keyframes pulse-ring {
-    0% { transform: scale(1); opacity: 0.3; }
-    100% { transform: scale(1.5); opacity: 0; }
-  }
-
-  .petal-bg {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-  }
-  .petal {
-    position: absolute;
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: var(--pink-light);
-    animation: falling linear infinite;
-    opacity: 0;
-  }
-  @keyframes falling {
-    0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 0.5; }
-    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-  }
-
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 2px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--pink-mid); border-radius: 2px; }
+  .btn-cta { display: block; width: 100%; padding: 18px; background: var(--pink); color: white; text-align: center; text-decoration: none; margin-top: 32px; border-radius: 2px; }
 </style>
 </head>
 <body>
 
-<!-- ══════════════ COVER ══════════════ -->
-<div id="screen-cover" class="screen active">
-  <div class="cover-corner tl"></div>
-  <div class="cover-corner tr"></div>
-  <div class="cover-corner bl"></div>
-  <div class="cover-corner br"></div>
-
-  <div style="position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; max-width: 360px; width: 100%;">
-
-    <div class="fade-up delay-1">
-      <p class="issue-label">Taichung Quanying · Health Check</p>
-    </div>
-
-    <div class="fade-up delay-2">
-      <div class="float" style="margin-bottom: 32px; text-align: center;">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="24" cy="24" r="23.5" stroke="#FCA5A5" stroke-width="0.5"/>
-          <path d="M24 12 C18 12, 12 17, 12 23 C12 30, 18 35, 24 38 C30 35, 36 30, 36 23 C36 17, 30 12, 24 12Z" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="0.5"/>
-          <path d="M24 16 C20 16, 16 20, 16 24 C16 28, 20 32, 24 34 C28 32, 32 28, 32 24 C32 20, 28 16, 24 16Z" fill="#FECACA"/>
-          <circle cx="24" cy="24" r="4" fill="#F87171"/>
-        </svg>
-      </div>
-    </div>
-
-    <h1 class="cover-title serif fade-up delay-2">台中群英<br>紅色活力小調查</h1>
-    <p class="cover-sub fade-up delay-3">血液健康自我檢測</p>
-
-    <div class="h-line fade-up delay-3" style="width: 40px; margin: 0 auto 32px;"></div>
-
-    <p class="cover-desc fade-up delay-4">
-      10 個關於疲勞、循環與修復的<br>
-      生活感受題，不到 3 分鐘，<br>
-      看看你的身體現在在說什麼。
-    </p>
-
-    <button class="btn-primary fade-up delay-5" onclick="startQuiz()">
-      <span>開始測驗</span>
-      <span style="font-family: 'DM Serif Display', serif; font-style: italic; font-size: 11px; color: #9CA3AF;">→</span>
-    </button>
-
-    <p class="cover-note fade-up delay-6">共 10 題 · 匿名進行 · 僅供參考</p>
-  </div>
+<div id="screen-cover" class="screen active flex flex-col justify-center items-center p-8">
+  <p class="issue-label">Taichung Quanying · Health Check</p>
+  <h1 class="cover-title serif">台中群英<br>血液活力深度探索</h1>
+  <p class="text-xs text-gray-400 tracking-widest mb-12">血液循環健康小測驗</p>
+  <button class="btn-primary" onclick="showScreen('screen-quiz')">開始檢測 →</button>
 </div>
 
-
-<!-- ══════════════ QUIZ ══════════════ -->
 <div id="screen-quiz" class="screen">
   <div class="quiz-header">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <span style="font-size: 10px; letter-spacing: 0.2em; color: var(--pink);">HEALTH SURVEY</span>
-      </div>
-      <div id="progress-text" style="font-size: 11px; color: #9CA3AF; font-family: 'DM Serif Display', serif; font-style: italic;">0 / 10</div>
+    <div class="flex justify-between items-center text-[10px] tracking-widest text-gray-400">
+      <span>BLOOD VITALITY DIAGNOSTIC</span>
+      <span id="progress-text">0 / 15</span>
     </div>
-    <div class="quiz-progress-bar">
-      <div class="quiz-progress-fill" id="progress-fill" style="width: 0%"></div>
-    </div>
+    <div class="quiz-progress-bar"><div id="progress-fill" class="quiz-progress-fill" style="width: 0%"></div></div>
   </div>
 
-  <div class="quiz-body">
-
-    <!-- Dimension A -->
-    <div class="dimension-header">
-      <span class="dimension-tag">Dimension A · 疲勞</span>
-      <h2 class="dimension-title serif">疲勞維度</h2>
+  <div class="quiz-body" id="quiz-container">
     </div>
-    <div class="h-line"></div>
-
-    <div class="question-item" data-q="1" data-dim="A" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 01</div>
-          <div class="q-text">即使睡飽醒來，仍覺得全身沈重？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-    <div class="question-item" data-q="2" data-dim="A" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 02</div>
-          <div class="q-text">下午時常感到腦袋空空的「腦霧感」？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-    <div class="question-item" data-q="3" data-dim="A" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 03</div>
-          <div class="q-text">每天需要 2 杯以上咖啡才能提神？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-    <div class="question-item" data-q="4" data-dim="A" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 04</div>
-          <div class="q-text">長期肩頸緊繃，偶爾伴隨緊繃型頭痛？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-
-    <!-- Dimension B -->
-    <div class="dimension-header">
-      <span class="dimension-tag">Dimension B · 循環</span>
-      <h2 class="dimension-title serif">循環維度</h2>
-    </div>
-    <div class="h-line"></div>
-
-    <div class="question-item" data-q="5" data-dim="B" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 05</div>
-          <div class="q-text">在冷氣房或冬天，手腳總是冰冷難以回溫？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-    <div class="question-item" data-q="6" data-dim="B" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 06</div>
-          <div class="q-text">皮膚出現小傷口或瘀青時，癒合速度變慢？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-    <div class="question-item" data-q="7" data-dim="B" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 07</div>
-          <div class="q-text">經常覺得腿部沈重、容易浮腫？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-    <div class="question-item" data-q="8" data-dim="B" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 08</div>
-          <div class="q-text">氣色顯得暗沈蠟黃，缺乏自然的紅潤感？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-
-    <!-- Dimension C -->
-    <div class="dimension-header">
-      <span class="dimension-tag">Dimension C · 修復</span>
-      <h2 class="dimension-title serif">修復維度</h2>
-    </div>
-    <div class="h-line"></div>
-
-    <div class="question-item" data-q="9" data-dim="C" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 09</div>
-          <div class="q-text">屬於容易腫脹的體質（如吃太鹹、生理期前明顯）？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-    <div class="question-item" data-q="10" data-dim="C" onclick="toggleQ(this)">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div>
-          <div class="q-number">No. 10</div>
-          <div class="q-text">身體常有慢性發炎跡象（如容易長痘、牙齦易浮腫）？</div>
-        </div>
-        <div class="q-checkbox"><div class="check-inner"></div></div>
-      </div>
-    </div>
-
-  </div>
 
   <div class="quiz-footer">
-    <button class="btn-submit" id="submit-btn" onclick="submitQuiz()">
-      <span>查看我的分析結果 →</span>
-    </button>
+    <button class="btn-submit" onclick="submitQuiz()">查看分析報告 →</button>
   </div>
 </div>
 
-
-<!-- ══════════════ RESULT ══════════════ -->
-<div id="screen-result" class="screen">
-
-  <div class="result-hero">
-    <span class="result-label fade-up delay-1">Analysis Result · 分析結果</span>
-    <h2 class="result-type serif fade-up delay-2" id="result-type-zh">核心疲勞型</h2>
-    <span class="result-type-en fade-up delay-3" id="result-type-en">Core Fatigue Type</span>
-    <div class="score-dots fade-up delay-4" id="score-dots"></div>
+<div id="screen-result" class="screen p-6">
+  <div class="text-center mb-10">
+    <p class="issue-label">Diagnostic Report</p>
+    <h2 class="serif text-2xl mb-2">測驗結果報告</h2>
+    <p id="overall-status" class="text-sm text-gray-500"></p>
   </div>
 
-  <div class="result-analysis">
-    <p class="analysis-heading">PERSONAL ANALYSIS</p>
-    <p class="analysis-body fade-up" id="analysis-text"></p>
+  <div id="dimension-results">
+    </div>
+
+  <div class="result-card mt-8">
+    <h3 class="serif text-lg mb-4">綜合保養建議</h3>
+    <p id="overall-advice" class="text-sm leading-relaxed text-gray-600"></p>
   </div>
 
-  <div class="score-section">
-    <p class="analysis-heading" style="margin-bottom: 24px;">DIMENSION SCORES</p>
-    <div class="score-row">
-      <span class="score-label">疲勞維度</span>
-      <div class="score-track"><div class="score-fill" id="bar-A" style="width: 0%"></div></div>
-      <span class="score-num" id="num-A">0</span>
+  <div class="voucher-section text-center py-8 border-t border-dashed border-gray-200">
+    <p class="text-[10px] tracking-widest text-pink-400 mb-4">專屬數位體驗憑證</p>
+    <div class="border border-pink-200 p-6 bg-white relative">
+      <h4 class="serif text-lg">氦氖雷射方案</h4>
+      <p class="text-[10px] text-gray-400 mb-4">BLOOD VITALITY PASS</p>
+      <div class="h-[0.5px] bg-pink-100 my-4"></div>
+      <p class="text-xs text-gray-500">請憑此頁面與醫師諮詢</p>
+      <p class="text-[10px] text-gray-300 mt-2" id="voucher-id">ID: TC-0000</p>
     </div>
-    <div class="score-row">
-      <span class="score-label">循環維度</span>
-      <div class="score-track"><div class="score-fill" id="bar-B" style="width: 0%"></div></div>
-      <span class="score-num" id="num-B">0</span>
-    </div>
-    <div class="score-row">
-      <span class="score-label">修復維度</span>
-      <div class="score-track"><div class="score-fill" id="bar-C" style="width: 0%"></div></div>
-      <span class="score-num" id="num-C">0</span>
-    </div>
+    <a href="https://line.me/R/oaMessage/@04-23029880/?我已經完成健康測驗" class="btn-cta">領取我的氦氖雷射方案</a>
+    <p class="text-[10px] text-gray-300 mt-6" onclick="location.reload()">重新測驗 ↺</p>
   </div>
-
-  <!-- VOUCHER -->
-  <div class="voucher-section">
-    <p class="voucher-label">— 數位體驗憑證 —</p>
-
-    <div class="voucher-card">
-      <p class="voucher-brand">Taichung Quanying · 台中群英</p>
-      <h3 class="voucher-title serif">血液活力體驗券</h3>
-      <span class="voucher-title-en">Blood Vitality Experience Pass</span>
-
-      <div class="h-line-pink"></div>
-
-      <div class="voucher-detail">
-        <div class="voucher-item">
-          <div class="voucher-item-label">使用方式</div>
-          <div class="voucher-item-val">出示本頁</div>
-        </div>
-        <div style="width: 0.5px; background: var(--pink-mid); align-self: stretch;"></div>
-        <div class="voucher-item">
-          <div class="voucher-item-label">適用對象</div>
-          <div class="voucher-item-val">新朋友首次</div>
-        </div>
-        <div style="width: 0.5px; background: var(--pink-mid); align-self: stretch;"></div>
-        <div class="voucher-item">
-          <div class="voucher-item-label">專屬編號</div>
-          <div class="voucher-item-val" id="voucher-code">TC-0000</div>
-        </div>
-      </div>
-
-      <div class="h-line-pink"></div>
-
-      <p class="voucher-note">此憑證由本次健康測驗自動生成 · 每位測驗者限用一次</p>
-    </div>
-
-    <a href="https://line.me/R/oaMessage/@04-23029880/?我已經完成健康測驗" 
-       class="btn-cta" target="_blank">
-      領取我的血液活力體驗券
-    </a>
-
-    <span class="restart-btn" onclick="restartQuiz()">重新測驗 ↺</span>
-  </div>
-
 </div>
 
 <script>
-  // ─── DATA ───
-  const results = {
+const questions = [
+  { dim: 'A', text: '昨晚明明睡很久，但起床後還是覺得全身沈重？' },
+  { dim: 'A', text: '下午三、四點常覺得腦袋空空的，無法集中精神？' },
+  { dim: 'A', text: '以前工作一整天都沒事，現在到中午就覺得體力耗盡？' },
+  { dim: 'A', text: '每天早上一定要靠兩杯以上黑咖啡才能「開機」？' },
+  { dim: 'A', text: '身體長時間處於緊繃狀態，就算休息也覺得心情焦躁？' },
+  { dim: 'B', text: '待在冷氣房或冬天，手腳總像冰棒一樣難以回溫？' },
+  { dim: 'B', text: '坐久或站久了，常覺得小腿沈重、發脹？' },
+  { dim: 'B', text: '照鏡子時發現臉色蠟黃、暗沈，缺乏紅潤感？' },
+  { dim: 'B', text: '偶爾會覺得指尖或腳底有輕微的麻木感？' },
+  { dim: 'B', text: '改變姿勢（如起身）時，常覺得頭暈、血液跟不上？' },
+  { dim: 'C', text: '皮膚上的小刮傷或瘀青，都要拖很久才會消失？' },
+  { dim: 'C', text: '身體常有小毛病，如反覆長痘、牙齦腫或嘴角破？' },
+  { dim: 'C', text: '吃稍微鹹一點或累一點，隔天起床臉部就明顯浮腫？' },
+  { dim: 'C', text: '周遭只要有人感冒就躲不掉，或換季過敏變頻繁？' },
+  { dim: 'C', text: '覺得身體代謝變差，排便或排汗似乎都不太順暢？' }
+];
+
+const quizContainer = document.getElementById('quiz-container');
+let scores = { A: 0, B: 0, C: 0 };
+let totalChecked = 0;
+
+// Render Questions
+const dims = { A: '疲勞維度', B: '循環維度', C: '修復維度' };
+Object.keys(dims).forEach(dim => {
+  const section = document.createElement('div');
+  section.className = 'dimension-section';
+  section.innerHTML = `<h3 class="dimension-title serif">${dims[dim]}</h3>`;
+  
+  questions.filter(q => q.dim === dim).forEach((q, idx) => {
+    const item = document.createElement('div');
+    item.className = 'question-item';
+    item.innerHTML = `<div class="q-text">No.${idx+1} ${q.text}</div><div class="q-checkbox"></div>`;
+    item.onclick = () => {
+      item.classList.toggle('checked');
+      const isChecked = item.classList.contains('checked');
+      scores[q.dim] += isChecked ? 1 : -1;
+      totalChecked += isChecked ? 1 : -1;
+      updateProgress();
+    };
+    section.appendChild(item);
+  });
+  quizContainer.appendChild(section);
+});
+
+function updateProgress() {
+  const pct = (totalChecked / 15) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').innerText = `${totalChecked} / 15`;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function getLevel(s) {
+  if (s >= 4) return { label: '高度需求', class: 'level-high' };
+  if (s >= 2) return { label: '中度需求', class: 'level-mid' };
+  return { label: '輕微需求', class: 'level-low' };
+}
+
+function submitQuiz() {
+  const resContainer = document.getElementById('dimension-results');
+  resContainer.innerHTML = '';
+  
+  const analysis = {
     A: {
-      zh: '核心疲勞型',
-      en: 'Core Fatigue Type',
-      analysis: `親愛的，你的身體現在有點像是一支電量不足的手機——明明「充了電」（睡了覺），但醒來依然感覺空空的。這不是你不努力休息，而是你的細胞層次的能量補充，正需要一些溫柔的支持。
-長期的深層疲勞感、腦霧與肩頸緊繃，往往是身體在悄悄告訴你：紅血球的帶氧效能可能已稍微下滑了。當氧氣無法順暢抵達每一個細胞，再多的睡眠也難以讓你真正回滿電。
-好消息是，這是可以改善的。先從傾聽身體開始。`
+      title: '疲勞維度分析',
+      advice: [
+        '目前狀態穩定，請繼續保持優質睡眠與規律作息。',
+        '身體開始累積隱性疲勞，建議睡前減少藍光，多補充水分與 B 群。若想深層修復，可與醫師討論氦氖雷射方案。',
+        '電力明顯不足。除了調整作息，建議諮詢醫師了解氦氖雷射與點滴輔助。'
+      ]
     },
     B: {
-      zh: '循環遲滯型',
-      en: 'Circulation Lag Type',
-      analysis: `你有沒有這樣的感覺：冬天手腳特別冷，暖氣開了半天還是回不了溫？或者明明沒撞到哪裡，卻發現手臂多了一塊瘀青？
-這些細節，是你的循環系統在低聲說話。血液不只負責輸送氧氣，它還是溫度、免疫與修復的重要載體。當微循環有些「遲滯」，身體末梢就像是訊號不好的邊境小鎮，補給送得慢，廢物也排得慢。
-你需要的，不是更努力，而是讓血液重新流動起來。`
+      title: '循環維度分析',
+      advice: [
+        '循環機能良好，建議透過日常拉伸維持經絡通暢。',
+        '末梢循環略顯遲滯，建議養成泡澡或溫水泡腳習慣。若冰冷感明顯，可與醫師討論氦氖雷射方案。',
+        '體內「物流」嚴重塞車。除了規律運動，建議諮詢專業醫師了解氦氖雷射對改善循環的幫助，並討論是否需要點滴輔助。'
+      ]
     },
     C: {
-      zh: '修復高需求型',
-      en: 'High Recovery Demand Type',
-      analysis: `你是不是有時候覺得，明明沒做什麼特別的事，身體卻好像一直在「處理」什麼？容易腫脹、偶爾長痘、牙齦不太舒服——這些，其實都是身體正在努力維持平衡的小訊號。
-修復高需求型的你，體內的抗氧化與消炎機制比一般人更活躍，但也因此消耗得更快。這就像是一個勤快的清潔工，天天打掃卻缺乏足夠的補給，時間久了也會感到吃力。
-讓身體修復系統重新獲得支持，你會發現整個人輕盈許多。`
+      title: '修復維度分析',
+      advice: [
+        '自癒力維持得不錯，請保持均衡飲食。',
+        '身體修復速度略微減緩，建議補充維生素 C 與優質蛋白。若常有小發炎，可諮詢醫師了解氦氖雷射方案或點滴輔助。',
+        '身體修復系統正處於超載狀態。建議諮詢醫師，透過氦氖雷射或高壓氧等療程來輔助找回平衡。'
+      ]
     }
   };
 
-  // ─── STATE ───
-  let scores = { A: 0, B: 0, C: 0 };
-  let checkedCount = 0;
+  Object.keys(scores).forEach(d => {
+    const level = getLevel(scores[d]);
+    const adviceIdx = scores[d] >= 4 ? 2 : (scores[d] >= 2 ? 1 : 0);
+    resContainer.innerHTML += `
+      <div class="mb-6">
+        <span class="tag-level ${level.class}">${level.label}</span>
+        <h4 class="font-medium mb-2">${analysis[d].title}</h4>
+        <p class="text-sm text-gray-600 leading-relaxed">${analysis[d].advice[adviceIdx]}</p>
+      </div>
+    `;
+  });
 
-  // ─── SCREEN TRANSITIONS ───
-  function showScreen(targetId) {
-    const current = document.querySelector('.screen.active');
-    const target = document.getElementById(targetId);
-    if (current) {
-      current.classList.add('exit');
-      setTimeout(() => current.classList.remove('active', 'exit'), 650);
-    }
-    setTimeout(() => {
-      target.scrollTop = 0;
-      target.classList.add('active');
-    }, 200);
+  // Overall Result
+  let statusText = '';
+  let overallAdvice = '';
+  if (totalChecked >= 11) {
+    statusText = '狀態略顯疲憊，建議尋求專業諮詢';
+    overallAdvice = '您的各項維度總分較高，這表示身體目前的「自癒」與「循環」機制可能正處於低迷狀態。除了多休息，建議您可以預約諮詢，由醫師評估氦氖雷射或高壓氧等輔助療程，幫助身體找回原本的活力。';
+  } else if (totalChecked >= 6) {
+    statusText = '身體開始發出微小訊號，請留意作息';
+    overallAdvice = '目前的狀態屬於過度期，身體雖然還能應付日常，但疲勞感已開始累積。建議增加深層睡眠的時間，並適度進行輕度運動。若想更積極保養，建議您可以預約諮詢，由醫師評估點滴輔助或氦氖雷射，都是不錯的選擇。';
+  } else {
+    statusText = '目前狀態穩定，請繼續保持！';
+    overallAdvice = '太棒了！您的身體指標目前非常健康。建議繼續維持均衡飲食與規律運動。若想長期維持這種輕盈感，可與醫師討論是否將氦氖雷射作為輔助的保養方法。';
   }
 
-  function startQuiz() {
-    showScreen('screen-quiz');
-  }
-
-  // ─── TOGGLE QUESTION ───
-  function toggleQ(el) {
-    const wasChecked = el.classList.contains('checked');
-    el.classList.toggle('checked');
-    const dim = el.dataset.dim;
-    if (wasChecked) {
-      scores[dim] = Math.max(0, scores[dim] - 1);
-      checkedCount--;
-    } else {
-      scores[dim]++;
-      checkedCount++;
-    }
-    updateProgress();
-  }
-
-  function updateProgress() {
-    const pct = (checkedCount / 10) * 100;
-    document.getElementById('progress-fill').style.width = pct + '%';
-    document.getElementById('progress-text').textContent = checkedCount + ' / 10';
-  }
-
-  // ─── SUBMIT ───
-  function submitQuiz() {
-    // find dominant type
-    let dominant = 'A';
-    if (scores.B > scores[dominant]) dominant = 'B';
-    if (scores.C > scores[dominant]) dominant = 'C';
-
-    // handle tie — prefer A > B > C (already done by order)
-    const data = results[dominant];
-
-    // populate result
-    document.getElementById('result-type-zh').textContent = data.zh;
-    document.getElementById('result-type-en').textContent = data.en;
-
-    const analysisEl = document.getElementById('analysis-text');
-    analysisEl.innerHTML = data.analysis.replace(/\n\n/g, '<br><br>');
-
-    // score dots (based on total checked)
-    const dotsEl = document.getElementById('score-dots');
-    dotsEl.innerHTML = '';
-    for (let i = 0; i < 10; i++) {
-      const d = document.createElement('div');
-      d.className = 'score-dot' + (i < checkedCount ? ' filled' : '');
-      dotsEl.appendChild(d);
-    }
-
-    // voucher code
-    const code = 'TC-' + Math.floor(1000 + Math.random() * 9000);
-    document.getElementById('voucher-code').textContent = code;
-
-    showScreen('screen-result');
-
-    // animate bars after transition
-    setTimeout(() => {
-      const maxScore = Math.max(scores.A, scores.B, scores.C, 1);
-      document.getElementById('bar-A').style.width = (scores.A / 4 * 100) + '%';
-      document.getElementById('bar-B').style.width = (scores.B / 4 * 100) + '%';
-      document.getElementById('bar-C').style.width = (scores.C / 2 * 100) + '%';
-      document.getElementById('num-A').textContent = scores.A;
-      document.getElementById('num-B').textContent = scores.B;
-      document.getElementById('num-C').textContent = scores.C;
-    }, 800);
-  }
-
-  // ─── RESTART ───
-  function restartQuiz() {
-    scores = { A: 0, B: 0, C: 0 };
-    checkedCount = 0;
-    document.querySelectorAll('.question-item').forEach(el => el.classList.remove('checked'));
-    updateProgress();
-    showScreen('screen-cover');
-  }
+  document.getElementById('overall-status').innerText = statusText;
+  document.getElementById('overall-advice').innerText = overallAdvice;
+  document.getElementById('voucher-id').innerText = `ID: TC-${Math.floor(1000 + Math.random() * 9000)}`;
+  
+  showScreen('screen-result');
+}
 </script>
 </body>
 </html>
